@@ -1,4 +1,6 @@
+app.js
 const express = require('express');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -7,6 +9,21 @@ app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
+
+// Use user routes
+app.use('/', userRoutes);
+
+// Configurable port
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+routes/userRoutes.js
+const express = require('express');
+
+const router = express.Router();
 
 // User data
 const users = [
@@ -32,8 +49,8 @@ const users = [
     }
 ];
 
-// Route to get users who accessed within the last 10 days
-app.get('/users', (req, res) => {
+// GET / - Retrieve users who accessed within the last 10 days
+router.get('/', (req, res) => {
 
     const currentDate = new Date();
 
@@ -49,9 +66,4 @@ app.get('/users', (req, res) => {
     res.json(filteredUsers);
 });
 
-// Configurable port
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+module.exports = router;
