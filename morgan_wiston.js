@@ -35,8 +35,12 @@ const logger = winston.createLogger({
 app.use(express.json());
 
 // Morgan HTTP request logging
-app.use(morgan('tiny'));
-app.use(morgan('combined'));
+// Morgan HTTP request logging
+app.use(morgan('tiny', {
+stream: {
+    write:(message)=>logger.info(message.trim())
+}
+}));
 
 // Custom request logging middleware
 app.use((req, res, next) => {
